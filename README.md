@@ -23,7 +23,9 @@ Add all folders to path and Run runexamples.m
 ## Some notes on Output structure
 
 Outputs will be stored in newer folder (with model name unless overridden in run codes)
+
 The simulation model object containing all the parameters values for each simulation iteration, definitions of non-linear activation functions or input update functions and input file information, if any, along with the simulated output timeseries can be found in the output of these example codes as popln or JS_pop variables
+
 Before loading these files, it is required to add "DataStructure and backend MAP" directory to path so that Matlab recognizes the objects and parses them meaningfully.
 
 The object could also be used for further extended simulations, in place, by redefining its tspan and relevant input information.
