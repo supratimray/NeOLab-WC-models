@@ -23,7 +23,11 @@ Add all folders to path and Run runexamples.m
 - contains code used in some example codes to auto-format figure axes and plots/scatters. 
 
 -----------------------------------------------------------------------------------
-## Some notes on Output structure
+
+-----------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------
+### Some notes on Output structure
 
 Outputs will be stored in newer folder (with model name unless overridden in run codes)
 
