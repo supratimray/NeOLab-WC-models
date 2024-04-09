@@ -19,6 +19,9 @@ Add all folders to path and Run runexamples.m
 ## Example codes - ISN model scripts
 - Some example simulations used previously for different WC model and functions used therein
 
+## misc-PublishableFigureFormatting
+- contains code used in some example codes to auto-format figure axes and plots/scatters. 
+
 -----------------------------------------------------------------------------------
 ## Some notes on Output structure
 
