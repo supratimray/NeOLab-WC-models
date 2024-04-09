@@ -13,7 +13,7 @@ Add all folders to path and Run runexamples.m
 - Defines simulation backend codes adaptable to different WC models tested to allow defining them under a common framework
 
 ## ISN model library MAP
-- Contains functions with previously used WC model definitions that return configured model object - summarized in parameter tables in papers
+- Contains "WC Model Cards" - functions with previously used WC model definitions that return configured model object - summarized in parameter tables in papers
 - Output objects need only be configured a bit further to specify simulation time and few more details.
 
 ## Example codes - ISN model scripts
