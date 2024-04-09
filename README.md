@@ -3,7 +3,7 @@ Codes used to organize, specify and simulate Wilson-Cowan type models with diffe
 
 
 # Get Started
-Run runexamples.m
+Add all folders to path and Run runexamples.m
 
 ----------------------------------------------------------------------------------
 
