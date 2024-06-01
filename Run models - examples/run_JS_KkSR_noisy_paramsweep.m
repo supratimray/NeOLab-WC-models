@@ -15,7 +15,6 @@ uniqI0 = 0:0.5:20;
 
 %% unwrap parameter combinations
 t = -0.3:0.5e-4:1; % seconds - for noisy inputs
-t = -0.3:0.001:1; % seconds
 paramnames = {'E0', 'I0', 'multiplierIDs', 'iterIDs'};
 params = { uniqE0, uniqI0, uniqmultids, iters};
 [varVals, varSels, nsims] = unwrapParameters(params);
@@ -171,11 +170,15 @@ for i_thsel=1:numel(thetaids)
     % TODO 
     describeDynamics(figure_singleInput, gca, @(nsims) ISN_KkSR_JS_OUip(nsims), [IE_ToPlot,II_ToPlot], NCvariableIDs, {rbounds, rbounds});
     hold on;
-    plot(rEsel(1,:),rIsel(1,:),[0.5,0.5,0.5],'linestyle','--','displayname','Trajectory example 1');
-    plot(rEsel(1,:),rIsel(2,:),'k','displayname','Trajectory example 2');
+    plot(rEsel(1,:),rIsel(1,:),[[0.5,0.5,0.5]],'linestyle','--','displayname','Trajectory example 1');
+    scatter(rEsel(1,1), rIsel(1,1),[],[[0.5,0.5,0.5]],'marker','x')
+    scatter(rEsel(1,end), rIsel(1,end),[],[[0.5,0.5,0.5]],'marker','o','filled')
+    plot(rEsel(2,:),rIsel(2,:),'k','displayname','Trajectory example 2');
+    scatter(rEsel(2,1), rIsel(2,1),[],'k','marker','x')
+    scatter(rEsel(2,end), rIsel(2,end),[],'k','marker','o','filled')
     title({'Phase diagram', ['E_E = ',num2str(IE_ToPlot)], ['E_I = ',num2str(II_ToPlot)]}); 
     xlabel('r_E'); ylabel('r_I');
-    
+    legend;
     % lfp proxy
     ax2=subplot(3,2,2);
     plot(t, rE(selid,:),'b'); 

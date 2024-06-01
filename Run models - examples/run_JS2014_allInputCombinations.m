@@ -11,8 +11,8 @@ end
 if isempty(modelname)
     modelname = 'JS2014'; % 'JS2014' or 'KkSR'
 end
-e0 = 0:0.5:25; lE=length(e0);
-i0 = 0:0.5:25; lI=length(i0);
+e0 = 0:0.5:22; lE=length(e0);
+i0 = 0:0.5:22; lI=length(i0);
 tspan = (0:2000)*1e-3; % seconds; Simulation timestamps
 
 %% setting up solver
@@ -29,19 +29,17 @@ E0 = E0(:); I0 = I0(:);
 nsimulations = length(E0);
 
 %% Instantiating population
-if ~exist('poplnFunc','var')
+if ~exist('modelname','var')
     modelname = [];
 end
 if isempty(modelname)
     JS_pop = ISN_JS2014(nsimulations);
-elseif isstr(modelname)
+else
     if strcmp(modelname,'JS2014')
         JS_pop = ISN_JS2014(nsimulations);
     elseif strcmp(modelname,'KkSR')
         JS_pop = ISN_KkSR_JS_OUip(nsimulations);
     end
-else
-    JS_pop = modelname(nsimulations);
 end
 
 

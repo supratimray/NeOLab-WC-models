@@ -1,5 +1,5 @@
 %% Initiate and Configure JS model
-function pop = ISN_JS2014(nsimulations, noisetype, noisefile, taus, theta,Weights, A)
+function pop = ISN_JS2014(nsimulations, noisefile, taus, theta,Weights, A)
     if ~exist('nsimulations','var')
         nsimulations = 1;
     end
@@ -14,9 +14,6 @@ function pop = ISN_JS2014(nsimulations, noisetype, noisefile, taus, theta,Weight
         theta = [5, 20];
     end
 
-    if ~exist('noisetype','var')
-        noisetype = 'normadd';
-    end
     if ~exist('noisefile','var')
         noisefile = [];
     end
@@ -41,30 +38,6 @@ function pop = ISN_JS2014(nsimulations, noisetype, noisefile, taus, theta,Weight
                     load(noisefile,'noise','noise_t');
                 end
             end
-        end
-        
-        if strcmp(noisetype,'normadd')
-        elseif contains(noisetype,'oulo','IgnoreCase',true)
-            freq=str2double(extractAfter(noisetype,'oulo'));
-            if ~exist(noisefile,'FILE')
-                mkdir('./NoiseFiles');
-                fvals = (0:numel(noise_t)-1)/numel(noise_t);
-
-                fvalsround = ((fvals<=0.5)*2-1).*min(fvals, 1-fvals);
-                ogfft = 1./(1+noisetau/mean(diff(noise_t))*1j*fvalsround);
-                
-                noisetau = 1/freq;
-                noise = [];
-                for row = 1:numel(E0)+numel(I0)
-                    noise = [noise; conv(...
-                        randn([numel(E0)+numel(I0),numel(noise_t)]),...
-                        ifft(ogfft),...
-                        'same') ];
-                end
-                save(noisefile,'noise_t','noise','noisetau','freq','ogfft','-v7.3');
-            end
-        else
-            error('Invalid noisetype argument!')
         end
         getnoise = @(t) noise(:,noise_t==t);
     end
