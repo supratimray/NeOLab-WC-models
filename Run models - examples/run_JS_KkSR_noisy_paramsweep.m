@@ -7,7 +7,7 @@ savedir = fullfile(basefolder, 'ConstContrast_JS_KkSR_allinputCombs'); mkdir(sav
 niterations = 2;
 iters = 1:niterations;
 
-thetasigma_multipliers = [[1/0, 0]; [1,1]]; % Row 1: JS2014 (OU time-constant = inf, i.e. ; noise_variance = 0), Row 2: JS_KkSR2023
+thetasigma_multipliers = [[1/0, 0]; [1,1]]; % Row 1: JS2014-style instantaneous input (OU time-constant = inf, i.e. ; noise_variance = 0), Row 2: JS_KkSR2023
 uniqmultids = 1:size(thetasigma_multipliers,1);
 
 uniqE0 = 0:0.5:20;
@@ -168,7 +168,6 @@ for i_thsel=1:numel(thetaids)
     figure_singleInput = figure('WindowState','maximized','InvertHardcopy','on');
     subplot(1,2,1);
     % run describe dynamics on @(nsims) ISN_KkSR_JS_OUip(nsims)
-    % TODO 
     describeDynamics(figure_singleInput, gca, @(nsims) ISN_KkSR_JS_OUip(nsims), [IE_ToPlot,II_ToPlot], NCvariableIDs, {rbounds, rbounds});
     hold on;
     plot(rEsel(1,:),rIsel(1,:),'color',[[0.5,0.5,0.5]],'linestyle','--','displayname','Trajectory example 1');
