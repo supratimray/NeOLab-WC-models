@@ -6,24 +6,13 @@ i0 = 0:0.5:20; lI=length(i0);
 %% Model saturates above 1
 e0 = e0/20;
 i0 = i0/20;
-%%
-eFR = zeros(lE,lI);
-iFR = zeros(lE,lI);
-peakFreq = zeros(lE,lI);
-harmonicFreq = zeros(lE,lI);
-freqRatio = zeros(lE,lI);
-peakAmp = zeros(lE,lI);
-harmonicAmp = zeros(lE,lI);
-powerRatio = zeros(lE,lI);
-hilbPhaseDiff = zeros(lE,lI);
 
 %%
 [E0, I0] = meshgrid(e0, i0);
 E0 = E0(:); I0 = I0(:);
 nsimulations = length(E0);
-% WC1972_pop = ISN_WC1972(nsimulations);
 if ~exist('beta','var')
-    beta = 0.25;
+    beta = 0.33;
 end
 if ~exist('poplnFunc','var')
     poplnFunc = [];
@@ -34,24 +23,19 @@ else
     WCRinzel17_pop = poplnFunc(nsimulations);
 end
 tspan = (0: 2e4)*1e-4; % seconds
-% WC1972_pop.input([E0;I0], tspan);
-% WC1972_pop
+
 WCRinzel17_pop.input([E0;(1-beta)*I0; (beta)*I0; zeros(size(E0)); zeros(size(E0));zeros(size(I0))], tspan);
-WCRinzel17_pop
+disp(WCRinzel17_pop)
 %%
-% [~,~,eFR,iFR,peakFreq,harmonicFreq,freqRatio,peakAmp,harmonicAmp,powerRatio,hilbPhaseDiff] = GammaHarmonicsTest(WC1972_pop, 0);
-% [~,~,eFR,iFR,peakFreq,harmonicFreq,freqRatio,peakAmp,harmonicAmp,powerRatio,hilbPhaseDiff] = GammaHarmonicsTest(pop, 0);
 
 % solver = @(updateFn, tlist, y0) eulerMethod(updateFn, tlist, y0);
-[~,~,eFR,iFR,peakFreq,harmonicFreq,freqRatio,peakAmp,harmonicAmp,powerRatio,hilbPhaseDiff, f_fft, R_fft] = GammaHarmonicsTest(WCRinzel17_pop);
-
-% goodHarmonicPos = find(harmonicAmp > 1.5);
-% goodGammaPos = find(peakAmp > 19);
-% goodPos = intersect(goodHarmonicPos,goodGammaPos);
+[~,~,eFR,iFR,peakFreq,harmonicFreq,freqRatio,peakAmp,harmonicAmp,powerRatio,hilbPhaseDiff, f_fft, R_fft] = GammaHarmonicsTest(WCRinzel17_pop); %#ok
 
 popln = WCRinzel17_pop;
 popln.Population_Name = [popln.Population_Name,'_beta', num2str(beta)];
-
+figure; plot(popln.EIpairs.t,  popln.EIpairs.R((E0(:)==5)&(I0(:)==5),:));
+xlabel('time(s)'); ylabel('E pop activity');
+title({'Dual gamma Keeley-Rinzel 2017 model',['Competition factor (\beta) = ', num2str(beta)]})
 plotGammaHarmonicTestFigures;
 %%
 end
