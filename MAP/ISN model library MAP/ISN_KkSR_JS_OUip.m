@@ -1,6 +1,6 @@
 %% Initiate and Configure 'KkSR' model for the JS model used in Krishnakumaran and Ray, Cerebral Cortex 2023.
 
-function pop = ISN_KkSR_JS_OUip(nsimulations, noisetype, noisefile, taus, theta,Weights, A)
+function pop = ISN_KkSR_JS_OUip(nsimulations, inputfile, taus, theta,Weights, A)
     if ~exist('nsimulations','var')
         nsimulations = 1;
     end
@@ -15,59 +15,34 @@ function pop = ISN_KkSR_JS_OUip(nsimulations, noisetype, noisefile, taus, theta,
         theta = [9.5 17];
     end
 
-    if ~exist('noisetype','var')
-        noisetype = 'normadd';
-    end
-    if ~exist('noisefile','var')
-        noisefile = [];
+    if ~exist('inputfile','var')
+        inputfile = [];
     end
     
 
-    if isempty(noisefile)
+    if isempty(inputfile)
         getnoise = @(t) 0;
     else
-        % Load input/noise timeseries from file
+        % Load input/input timeseries from file 
+        % Error prone when multiple instances of simulations are run
+        % concurrently (multiple read requests)
         try
-            load(noisefile,'noise','noise_t');
+            load(inputfile,'input','input_t');
         catch
             try
 
-                load(noisefile,'noise','noise_t');
+                load(inputfile,'input','input_t');
             catch
                 try
 
-                    load(noisefile,'noise','noise_t');
+                    load(inputfile,'input','input_t');
                 catch
 
-                    load(noisefile,'noise','noise_t');
+                    load(inputfile,'input','input_t');
                 end
             end
         end
-        
-        if strcmp(noisetype,'normadd')
-        elseif contains(noisetype,'oulo','IgnoreCase',true)
-            freq=str2double(extractAfter(noisetype,'oulo'));
-            if ~exist(noisefile,'FILE')
-                mkdir('./NoiseFiles');
-                fvals = (0:numel(noise_t)-1)/numel(noise_t);
-
-                fvalsround = ((fvals<=0.5)*2-1).*min(fvals, 1-fvals);
-                ogfft = 1./(1+noisetau/mean(diff(noise_t))*1j*fvalsround);
-                
-                noisetau = 1/freq;
-                noise = [];
-                for row = 1:numel(E0)+numel(I0)
-                    noise = [noise; conv(...
-                        randn([numel(E0)+numel(I0),numel(noise_t)]),...
-                        ifft(ogfft),...
-                        'same') ];
-                end
-                save(noisefile,'noise_t','noise','noisetau','freq','ogfft','-v7.3');
-            end
-        else
-            error('Invalid noisetype argument!')
-        end
-        getnoise = @(t) noise(:,noise_t==t);
+        getnoise = @(t) input(:,input_t==t);
     end
 
     pop = GenerateNeuronPopulation;
@@ -107,7 +82,7 @@ function pop = ISN_KkSR_JS_OUip(nsimulations, noisetype, noisefile, taus, theta,
         % case is implemented for variables with tau=inf
 
     pop.EIpairs.InSum = @( objArr, t, y, recordflag) ...
-        normadd_sigmoid( objArr.W *y ...
-        + (objArr.Input) + getnoise(t)...
+        normadd_sigmoid( ...
+        objArr.W *y + (objArr.Input) + getnoise(t)...
         , A, theta);
 end

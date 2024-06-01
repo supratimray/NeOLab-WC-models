@@ -20,8 +20,7 @@ function pop = OU_noise_lopass_form(nsimulations, noisefile, theta)
         getnoise = @(t) noise(:,noise_t==t);
     end
 
-    nStateVars = 2; % corresponding to E and I cells' state variables
-    
+    nStateVars = 1;     
     pop = GenerateNeuronPopulation; % EI_populationArray;
     % TODO: configure ssnpop for experiment
     pop.connectivityMaxW = zeros(nStateVars);
