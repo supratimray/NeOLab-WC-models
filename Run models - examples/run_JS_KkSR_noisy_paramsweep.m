@@ -70,7 +70,7 @@ t = JSpop.EIpairs.t;
 rE = JSpop.EIpairs.R(1:end/2, :);
 rI = JSpop.EIpairs.R(end/2+1:end, :);
 lfp = - rE - rI;
-save(simulationfilename, 'JSpop','lfp','inputfilename','niterations','uniqE0','uniqI0',"thetasigma_multipliers");
+save(simulationfilename, 'JSpop','lfp','inputfilename','niterations','uniqE0','uniqI0',"thetasigma_multipliers",'-v7.3');
 clear JSpop
 %% Plots
 thetaids = 1:2;
