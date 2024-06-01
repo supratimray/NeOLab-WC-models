@@ -103,3 +103,22 @@ subplot(2,3,4); pcolor(E0,I0,pkpower); colormap jet; colorbar; shading interp; c
 title({'peak gamma power','(log_{10}(power))'}); xlabel('I_E'); ylabel('I_I');
 subplot(2,3,5); pcolor(E0,I0,pkfreq); colormap jet; colorbar; shading interp; clim([40 70]);
 title({'Peak gamma freq','(Hz)'}); xlabel('I_E'); ylabel('I_I');
+
+IE_ToPlot = 8;
+II_ToPlot = 6;
+selid = (E0(:)==IE_ToPlot) & (I0(:)==II_ToPlot);
+rEsel = re(selid,:);
+rIsel = re(selid,:);
+%% Phase diagram analysis
+figure_singleInput = figure('WindowState','maximized','InvertHardcopy','on');
+subplot(1,2,1);
+% run describe dynamics on @(nsims) ISN_KkSR_JS_OUip(nsims)
+describeDynamics(figure_singleInput, gca, @(nsims) ISN_KkSR_JS_OUip(nsims), [IE_ToPlot,II_ToPlot], NCvariableIDs, {rbounds, rbounds});
+hold on;
+plot(rEsel(1,:),rIsel(1,:),'color',[[0.5,0.5,0.5]],'linestyle','--','displayname','Trajectory example 1');
+scatter(rEsel(1,1), rIsel(1,1),[],[[0.5,0.5,0.5]],'marker','x');
+scatter(rEsel(1,end), rIsel(1,end),[],[[0.5,0.5,0.5]],'marker','o','filled');
+title({'Phase diagram', ['E_E = ',num2str(IE_ToPlot)], ['E_I = ',num2str(II_ToPlot)]}); 
+xlabel('r_E'); ylabel('r_I');
+legend;
+
