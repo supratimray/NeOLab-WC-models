@@ -70,7 +70,7 @@ t = JSpop.EIpairs.t;
 rE = JSpop.EIpairs.R(1:end/2, :);
 rI = JSpop.EIpairs.R(end/2+1:end, :);
 lfp = - rE - rI;
-save(simulationfilename, 'JSpop','lfp','inputfilename','niterations','uniqE0','uniqI0',"thetasigma_multipliers");
+save(simulationfilename, 'JSpop','lfp','inputfilename','niterations','uniqE0','uniqI0',"thetasigma_multipliers",'-v7.3');
 clear JSpop
 %% Plots
 thetaids = 1:2;
@@ -162,8 +162,8 @@ for i_thsel=1:numel(thetaids)
     NCvariableIDs = [1,2]; % which statevars correspond to E and I (in order), for phase diagram making
     
     selid = findIndexByParamComb(varSels,params,{IE_ToPlot,II_ToPlot,thetaidsel,[]});
-    rEsel = rE(selid,:);
-    rIsel = rI(selid,:);
+    rEsel = JSpop.EIpairs.R(find(selid),:);
+    rIsel = JSpop.EIpairs.R(find(selid)+end/2,:);
 
     figure_singleInput = figure('WindowState','maximized','InvertHardcopy','on');
     subplot(1,2,1);
@@ -171,14 +171,15 @@ for i_thsel=1:numel(thetaids)
     describeDynamics(figure_singleInput, gca, @(nsims) ISN_KkSR_JS_OUip(nsims), [IE_ToPlot,II_ToPlot], NCvariableIDs, {rbounds, rbounds});
     hold on;
     plot(rEsel(1,:),rIsel(1,:),'color',[[0.5,0.5,0.5]],'linestyle','--','displayname','Trajectory example 1');
-    scatter(rEsel(1,1), rIsel(1,1),[],[[0.5,0.5,0.5]],'marker','x')
-    scatter(rEsel(1,end), rIsel(1,end),[],[[0.5,0.5,0.5]],'marker','o','filled')
     plot(rEsel(2,:),rIsel(2,:),'k','displayname','Trajectory example 2');
+    scatter(rEsel(1,1), rIsel(1,1),[],[[0.5,0.5,0.5]],'marker','x')
+    scatter(rEsel(1,end), rIsel(1,end),[],[[0.5,0.5,0.5]],'filled','marker','o')
     scatter(rEsel(2,1), rIsel(2,1),[],'k','marker','x')
-    scatter(rEsel(2,end), rIsel(2,end),[],'k','marker','o','filled')
+    scatter(rEsel(2,end), rIsel(2,end),[],'k','filled','marker','o')
     title({'Phase diagram', ['E_E = ',num2str(IE_ToPlot)], ['E_I = ',num2str(II_ToPlot)]}); 
     xlabel('r_E'); ylabel('r_I');
-    legend;
+    
+legend({'Field', 'E nullcline', 'I nullcline', 'Trajectory example 1', 'Trajectory example 2'});
     % lfp proxy
     ax2=subplot(3,2,2);
     plot(t, rE(selid,:),'b'); 

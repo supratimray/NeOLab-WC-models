@@ -33,22 +33,23 @@ if ~exist('modelname','var')
     modelname = [];
 end
 if isempty(modelname)
-    JS_pop = ISN_JS2014(nsimulations);
+    model = @(N) ISN_JS2014(N);
 else
     if strcmp(modelname,'JS2014')
-        JS_pop = ISN_JS2014(nsimulations);
+        model = @(N) ISN_JS2014(N);
     elseif strcmp(modelname,'KkSR')
-        JS_pop = ISN_KkSR_JS_OUip(nsimulations);
+        model = @(N) ISN_KkSR_JS_OUip(N);
     end
 end
 
+JS_pop = model(nsimulations);
 
 %% savedir setup
 basefolder = ['./',JS_pop.Population_Name,'_ConstantIP_results'];
 filename = 'Simdata';
 mkdir(basefolder);
 savename = fullfile(basefolder,[filename,'.mat']);
-
+if ~exist(savename,'file')
 %% Loading constant inputs throughout tspan
 JS_pop.input([E0;I0], tspan);
 
@@ -92,7 +93,9 @@ pkpower = reshape(pkpower,[lI,lE]);
 pkfreq = reshape(pkfreq,[lI,lE]);
 disp(['Saving simulation record to... ', savename]);
 save(savename,'-v7.3');
-
+else
+load(savename);
+end
 figure('windowstate','maximized');
 subplot(2,3,1); pcolor(E0,I0,efr); colormap jet; colorbar; shading interp; clim([0 1]); 
 title('E firing rate'); xlabel('I_E'); ylabel('I_I');
@@ -103,22 +106,24 @@ subplot(2,3,4); pcolor(E0,I0,pkpower); colormap jet; colorbar; shading interp; c
 title({'peak gamma power','(log_{10}(power))'}); xlabel('I_E'); ylabel('I_I');
 subplot(2,3,5); pcolor(E0,I0,pkfreq); colormap jet; colorbar; shading interp; clim([40 70]);
 title({'Peak gamma freq','(Hz)'}); xlabel('I_E'); ylabel('I_I');
-
-IE_ToPlot = 8;
-II_ToPlot = 6;
+%%
+IE_ToPlot = 8.5;
+II_ToPlot = 6.5;
 selid = (E0(:)==IE_ToPlot) & (I0(:)==II_ToPlot);
-rEsel = re(selid,:);
-rIsel = re(selid,:);
+rEsel = JS_pop.EIpairs.R(find(selid),:);
+rIsel = JS_pop.EIpairs.R(find(selid)+end/2,:);
 %% Phase diagram analysis
 figure_singleInput = figure('WindowState','maximized','InvertHardcopy','on');
 subplot(1,2,1);
 % run describe dynamics on @(nsims) ISN_KkSR_JS_OUip(nsims)
-describeDynamics(figure_singleInput, gca, @(nsims) ISN_KkSR_JS_OUip(nsims), [IE_ToPlot,II_ToPlot], NCvariableIDs, {rbounds, rbounds});
+NCvariableIDs = [1,2];
+rbounds = [0, 1];
+describeDynamics(figure_singleInput, gca, model, [IE_ToPlot,II_ToPlot], NCvariableIDs, {rbounds, rbounds});
 hold on;
-plot(rEsel(1,:),rIsel(1,:),'color',[[0.5,0.5,0.5]],'linestyle','--','displayname','Trajectory example 1');
+plot(rEsel(1,:),rIsel(1,:),'color',[[0.5,0.5,0.5]],'displayname','Trajectory example');
 scatter(rEsel(1,1), rIsel(1,1),[],[[0.5,0.5,0.5]],'marker','x');
-scatter(rEsel(1,end), rIsel(1,end),[],[[0.5,0.5,0.5]],'marker','o','filled');
-title({'Phase diagram', ['E_E = ',num2str(IE_ToPlot)], ['E_I = ',num2str(II_ToPlot)]}); 
+scatter(rEsel(1,end), rIsel(1,end),[],'k','filled','marker','o');
+title({'Phase diagram', ['I_E = ',num2str(IE_ToPlot)], ['I_I = ',num2str(II_ToPlot)]}); 
 xlabel('r_E'); ylabel('r_I');
-legend;
+legend({'Field', 'E nullcline', 'I nullcline', 'Trajectory example'});
 

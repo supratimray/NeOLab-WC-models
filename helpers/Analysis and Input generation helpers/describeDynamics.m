@@ -58,7 +58,8 @@ function [NC,Quiver] = describeDynamics(fig, ax, model, modelinputs, NCvariableI
     modelpop = model(nsims);
     modelpop.input(unwrappedinput(:), 0:1e-3:2);
     
-    rhs = @(y) -y + modelpop.EIpairs.InSum(modelpop.EIpairs,0, y, false);
+%     rhs = @(y) (-y + modelpop.EIpairs.InSum(modelpop.EIpairs,0, y, false))./modelpop.EIpairs.tau(:);
+    rhs = @(y) modelpop.EI_update(1000,y(:));
     dr_dt = reshape( rhs(varVals), [], nstatevars);
     dr_dt_XY = dr_dt(:, plotvars(:)');
     i_XY     = varCombinations(:,plotvars(:)');
@@ -106,7 +107,7 @@ function [NC,Quiver] = describeDynamics(fig, ax, model, modelinputs, NCvariableI
     modelpop = model(nsims);
     modelpop.input(unwrappedinput(:), 0:1e-3:2);
     
-    residual = @(y) -y + modelpop.EIpairs.InSum(modelpop.EIpairs,0, y, false);
+    residual = @(y) modelpop.EI_update(10000,y(:));% @(y) (-y + modelpop.EIpairs.InSum(modelpop.EIpairs,0, y, false))./modelpop.EIpairs.tau(:);
     
     rmserror = reshape((residual(varVals).^2).^0.5,[],nstatevars);
     
@@ -138,7 +139,7 @@ function [NC,Quiver] = describeDynamics(fig, ax, model, modelinputs, NCvariableI
     modelpop = model(nsims);
     modelpop.input(unwrappedinput(:), 0:1e-3:2);
     
-    residual = @(y) -y + modelpop.EIpairs.InSum(modelpop.EIpairs,0, y, false);
+    residual = @(y) modelpop.EI_update(10000,y(:));% @(y) (-y + modelpop.EIpairs.InSum(modelpop.EIpairs,0, y, false))./modelpop.EIpairs.tau(:);
     
     for i=1:10000
         dt = 1/1000;
