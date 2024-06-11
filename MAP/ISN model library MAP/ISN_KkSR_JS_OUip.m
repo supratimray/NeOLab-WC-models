@@ -57,8 +57,8 @@ function pop = ISN_KkSR_JS_OUip(nsimulations, inputfile, taus, theta,Weights, A)
     
     % Setup neuron class object to record simulation outputs and states
     nStateVars = 2; % Firing rates of E and I population
-    pop.setupEIPopulation(nsimulations, nStateVars, 'KkSR_2023', taus);
-    pop.Population_Name = 'KkSR_2023';
+    pop.setupEIPopulation(nsimulations, nStateVars, 'KkSR2023', taus);
+
     
     % Defining activation function to be used to update states of the
     % dynamical system

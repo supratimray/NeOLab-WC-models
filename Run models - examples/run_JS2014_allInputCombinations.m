@@ -30,16 +30,13 @@ nsimulations = length(E0);
 
 %% Instantiating population
 if ~exist('modelname','var')
-    modelname = [];
+    modelname = 'JS2014';
 end
-if isempty(modelname)
+
+if strcmp(modelname,'JS2014')
     model = @(N) ISN_JS2014(N);
-else
-    if strcmp(modelname,'JS2014')
-        model = @(N) ISN_JS2014(N);
-    elseif strcmp(modelname,'KkSR')
-        model = @(N) ISN_KkSR_JS_OUip(N);
-    end
+elseif strcmp(modelname,'KkSR')
+    model = @(N) ISN_KkSR_JS_OUip(N);
 end
 
 JS_pop = model(nsimulations);
@@ -106,13 +103,19 @@ subplot(2,3,4); pcolor(E0,I0,pkpower); colormap jet; colorbar; shading interp; c
 title({'peak gamma power','(log_{10}(power))'}); xlabel('I_E'); ylabel('I_I');
 subplot(2,3,5); pcolor(E0,I0,pkfreq); colormap jet; colorbar; shading interp; clim([40 70]);
 title({'Peak gamma freq','(Hz)'}); xlabel('I_E'); ylabel('I_I');
-%%
-IE_ToPlot = 8.5;
-II_ToPlot = 6.5;
+%% Phase space analysis inputs 
+if strcmp(modelname,'JS2014')
+    IE_ToPlot = 8;
+    II_ToPlot = 8;
+elseif strcmp(modelname,'KkSR')
+    IE_ToPlot = 8.5;
+    II_ToPlot = 6.5;
+end
+% example trajectory to plot
 selid = (E0(:)==IE_ToPlot) & (I0(:)==II_ToPlot);
 rEsel = JS_pop.EIpairs.R(find(selid),:);
 rIsel = JS_pop.EIpairs.R(find(selid)+end/2,:);
-%% Phase diagram analysis
+%% Phase diagram plotting
 figure_singleInput = figure('WindowState','maximized','InvertHardcopy','on');
 subplot(1,2,1);
 % run describe dynamics on @(nsims) ISN_KkSR_JS_OUip(nsims)
