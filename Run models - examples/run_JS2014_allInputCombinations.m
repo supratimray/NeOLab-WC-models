@@ -120,10 +120,10 @@ NCvariableIDs = [1,2];
 rbounds = [0, 1];
 describeDynamics(figure_singleInput, gca, model, [IE_ToPlot,II_ToPlot], NCvariableIDs, {rbounds, rbounds});
 hold on;
-plot(rEsel(1,:),rIsel(1,:),'color',[[0.5,0.5,0.5]],'displayname','Trajectory example');
-scatter(rEsel(1,1), rIsel(1,1),[],[[0.5,0.5,0.5]],'marker','x');
+plot(rEsel(1,:),rIsel(1,:),'color',[[0.5,0.5,0.5]],'displayname','Trajectory example'); %#ok
+scatter(rEsel(1,1), rIsel(1,1),[],[[0.5,0.5,0.5]],'marker','x');                        %#ok
 scatter(rEsel(1,end), rIsel(1,end),[],'k','filled','marker','o');
-title({'Phase diagram', ['I_E = ',num2str(IE_ToPlot)], ['I_I = ',num2str(II_ToPlot)]}); 
+title({[JS_pop.Population_Name,'  :  Phase diagram'], ['I_E = ',num2str(IE_ToPlot)], ['I_I = ',num2str(II_ToPlot)]}); 
 xlabel('r_E'); ylabel('r_I');
 legend({'Field', 'E nullcline', 'I nullcline', 'Trajectory example'});
 

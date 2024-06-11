@@ -162,18 +162,18 @@ for i_thsel=1:numel(thetaids)
     NCvariableIDs = [1,2]; % which statevars correspond to E and I (in order), for phase diagram making
     
     selid = findIndexByParamComb(varSels,params,{IE_ToPlot,II_ToPlot,thetaidsel,[]});
-    rEsel = JSpop.EIpairs.R(find(selid),:);
-    rIsel = JSpop.EIpairs.R(find(selid)+end/2,:);
+    rEsel = rE(selid,:);
+    rIsel = rI(selid,:);
 
     figure_singleInput = figure('WindowState','maximized','InvertHardcopy','on');
     subplot(1,2,1);
     % run describe dynamics on @(nsims) ISN_KkSR_JS_OUip(nsims)
     describeDynamics(figure_singleInput, gca, @(nsims) ISN_KkSR_JS_OUip(nsims), [IE_ToPlot,II_ToPlot], NCvariableIDs, {rbounds, rbounds});
     hold on;
-    plot(rEsel(1,:),rIsel(1,:),'color',[[0.5,0.5,0.5]],'linestyle','--','displayname','Trajectory example 1');
+    plot(rEsel(1,:),rIsel(1,:),'color',[[0.5,0.5,0.5]],'linestyle','--','displayname','Trajectory example 1');                %#ok
     plot(rEsel(2,:),rIsel(2,:),'k','displayname','Trajectory example 2');
-    scatter(rEsel(1,1), rIsel(1,1),[],[[0.5,0.5,0.5]],'marker','x')
-    scatter(rEsel(1,end), rIsel(1,end),[],[[0.5,0.5,0.5]],'filled','marker','o')
+    scatter(rEsel(1,1), rIsel(1,1),[],[[0.5,0.5,0.5]],'marker','x')                %#ok
+    scatter(rEsel(1,end), rIsel(1,end),[],[[0.5,0.5,0.5]],'filled','marker','o')                %#ok
     scatter(rEsel(2,1), rIsel(2,1),[],'k','marker','x')
     scatter(rEsel(2,end), rIsel(2,end),[],'k','filled','marker','o')
     title({'Phase diagram', ['E_E = ',num2str(IE_ToPlot)], ['E_I = ',num2str(II_ToPlot)]}); 
@@ -203,7 +203,7 @@ legend({'Field', 'E nullcline', 'I nullcline', 'Trajectory example 1', 'Trajecto
     subplot(3,2,6);
     t_sel_fft = t>=0.25 & t<=1;
     fstep = 1/(max(t(t_sel_fft))-min(t(t_sel_fft)));
-    plot((0:sum(t_sel_fft)-1)*fstep, 2*log10(abs(fft(lfp(selid,t_sel_fft))),'k'));
+    plot((0:sum(t_sel_fft)-1)*fstep, 2*log10(abs(fft(lfp(selid,t_sel_fft)))),'k');
     ylabel('log_{10}(PSD)');
     xlabel('frequency (Hz)');
     xlim([0 150]);
