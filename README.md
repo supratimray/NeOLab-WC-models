@@ -5,7 +5,15 @@ This repository is made of stripped-down versions of codes used to run WC models
 ## Get Started
 Add all folders to path and Run runexamples.m
 
-----------------------------------------------------------------------------------
+----------------------------------------------------------------
+# NeoLab-WC-models-basic is another repository which implements some simple WC models and displays the responses for constant inputs given to the excitatory and inhibitory populations. This repository uses a more advanced coding structure which does the following:
+1. Different models are incorporated in a single structure. This is done by first creating generic classes(see Neurons.m and GenerateNeuronPopulation.m under MAP/DataStructure and backend MAP/Simulation - Network Classes). Subsequently, different "model cards" under MAP/ISN model library MAP are configured.
+
+2. Allows the inputs to be noisy.
+
+3. Allows time varying inputs to E and I populations.
+4. Can potentially be expanded to other models as well, such as SSN.
+
 # Contents
 
 ## DataStructure and backend MAP
@@ -22,11 +30,8 @@ Add all folders to path and Run runexamples.m
 ## misc-PublishableFigureFormatting
 - contains code used in some example codes to auto-format figure axes and plots/scatters. 
 
------------------------------------------------------------------------------------
+----------------------------------------------------------------
 
------------------------------------------------------------------------------------
-
------------------------------------------------------------------------------------
 ### Some notes on Output structure
 
 Outputs will be stored in newer folder (with model name unless overridden in run codes)
